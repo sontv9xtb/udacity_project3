@@ -129,3 +129,20 @@ Please provide up to 3 sentences for each suggestion. Additional content in your
 ### Best Practices
 * Dockerfile uses an appropriate base image for the application being deployed. Complex commands in the Dockerfile include a comment describing what it is doing.
 * The Docker images use semantic versioning with three numbers separated by dots, e.g. `1.2.1` and  versioning is visible in the  screenshot. See [Semantic Versioning](https://semver.org/) for more details.
+
+
+## STEP
+# STEP 1: check credidential with aws : aws configure list
+# STEP 2: manually create cluster in the Elastic Kubernetes Service : 
+# STEP 3: after create cluster successfully, then run update the kubeconfig : aws eks --region us-east-1 update-kubeconfig --name my-cluster
+# STEP 4: configure database by run :
+ - kubectl apply -f pvc.yaml
+ - kubectl apply -f pv.yaml
+ - kubectl apply -f postgresql-deployment.yaml
+ # STEP 5: ssh to run default script file
+ - PGPASSWORD="$DB_PASSWORD" psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 -f 1_create_tables.sql
+ # STEP 6: create deployment file, create config map, create secerts
+  - kubectl apppy -f confimap.yml
+  - kubectl apply -f secerts.yml
+  - kubectl apply -f coworking.yaml
+  DNS LoadBlancers: http://afcc94f770e97447d8d02f66f5e8fc6f-1719062685.us-east-1.elb.amazonaws.com:5153//api/reports/user_visits

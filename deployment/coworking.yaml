@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: coworking
-        image: 823478365531.dkr.ecr.us-east-1.amazonaws.com/final-project3:0.0.1
+        image: 823478365531.dkr.ecr.us-east-1.amazonaws.com/final-project3:3
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -44,29 +44,9 @@ spec:
             port: 5153
           initialDelaySeconds: 5
           timeoutSeconds: 5
-        env:
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: postgresql-config
-              key: DB_HOST
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: postgresql-config
-              key: DB_PORT
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: postgresql-config
-              key: DB_NAME
-        - name: DB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: postgresql-config
-              key: DB_USERNAME
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-secret
-              key: POSTGRES_PASSWORD
+        envFrom:
+          - secretRef:
+              name: my-postgres-db-password
+          - configMapRef:
+              name: my-postgres-db-configmap
+      restartPolicy: Always
