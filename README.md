@@ -132,17 +132,25 @@ Please provide up to 3 sentences for each suggestion. Additional content in your
 
 
 ## STEP
-# STEP 1: check credidential with aws : aws configure list
-# STEP 2: manually create cluster in the Elastic Kubernetes Service : 
-# STEP 3: after create cluster successfully, then run update the kubeconfig : aws eks --region us-east-1 update-kubeconfig --name my-cluster
+# STEP 1: check credidential with aws : aws configure list(set access token)
+# STEP 2: create cluster in the Elastic Kubernetes Service : 
+Create EKS : eksctl create cluster --name {{CLUSTER_NAME}} --region us-east-1 --nodegroup-name {{NODE_GROUP_NAME}} --node-type t3.small --nodes 1 --nodes-min 1 --nodes-max 2
+Connect EKS: aws eks update-kubeconfig --region us-east-1 --name {{CLUSTER_NAME}}
+delete cluster after done project: eksctl delete cluster --name {{CLUSTER_NAME}} --region us-east-1
+# STEP 3: after create cluster successfully, add cloud watch to EKS cluster:
+- Add new policy CloudWatchAgentServerPolicy to EKS Node group rol:
+ aws iam attach-role-policy --role-name {{EKS_NODE_GROUP_ROLE_NAME}} --policy-arn arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+- Add addon cloudwatch to EKS
+ aws eks create-addon --cluster-name {{CLUSTER_NAME}} --addon-name amazon-cloudwatch-observability
 # STEP 4: configure database by run :
  - kubectl apply -f pvc.yaml
  - kubectl apply -f pv.yaml
  - kubectl apply -f postgresql-deployment.yaml
  # STEP 5: ssh to run default script file
+ - kubectl port-forward service/postgresql-service 5433:5432 &
  - PGPASSWORD="$DB_PASSWORD" psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 -f 1_create_tables.sql
  # STEP 6: create deployment file, create config map, create secerts
   - kubectl apppy -f confimap.yml
   - kubectl apply -f secerts.yml
   - kubectl apply -f coworking.yaml
-  DNS LoadBlancers: http://afcc94f770e97447d8d02f66f5e8fc6f-1719062685.us-east-1.elb.amazonaws.com:5153//api/reports/user_visits
+  DNS LoadBlancers: http://ac985185241754d4696cdff4cc745a86-549888252.us-east-1.elb.amazonaws.com:5153/api/reports/user_visits
