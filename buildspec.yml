@@ -10,7 +10,7 @@ phases:
       - echo Starting build at `date`
       - echo Building the Docker image...          
       - docker build -t final-project3:3 .
-      - docker tag final-project3:3 145094223802.dkr.ecr.us-east-1.amazonaws.com/final-project3:3      
+      - docker tag final-project3:3 823478365531.dkr.ecr.us-east-1.amazonaws.com/final-project3:3      
   post_build:
     commands:
       - echo Completed build at `date`
